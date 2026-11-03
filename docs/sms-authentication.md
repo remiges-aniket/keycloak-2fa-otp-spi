@@ -202,7 +202,7 @@ If you change the text, change the DLT registration first.
 |---|---|---|---|
 | `v5` | `https://api.pepipost.com/v5/mail/send` | header `api_key` | v5 |
 | `v6` | `https://emailapi.netcorecloud.net/v6/mail/send` | header `Authorization: Bearer <key>` | v5 shape plus `priorityflag: 1` (OTP / transactional) |
-| `legacy` | older BSE-style gateway | header `api_key` | `personalizations.recipient`, `from.fromEmail`, `from.fromName`, `content`, `tags` |
+| `legacy` | older Broadside-style gateway | header `api_key` | `personalizations.recipient`, `from.fromEmail`, `from.fromName`, `content`, `tags` |
 
 The format must match the URL. HTTP **200** or **202** counts as sent. If the provider rejects the mail, the user sees an error page.
 
