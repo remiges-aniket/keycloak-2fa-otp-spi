@@ -1,6 +1,6 @@
 <div align="center">
 
-# Remiges Keycloak SPI Suite
+# Keycloak 2FA (SMS + Email OTP) and Login Security SPIs
 
 **Login hardening for Keycloak: OTP by SMS and email, IP and country allow-lists, a captcha login form, single-session enforcement, and password-reset email through an HTTP email API.**
 

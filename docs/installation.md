@@ -104,11 +104,11 @@ runs `kc.sh build`, then starts Keycloak with `start --optimized`.
 ```bash
 cd keycloak-spis
 mvn clean install                         # the Dockerfile copies the JAR from target/
-docker build -t keycloak-remiges .
+docker build -t keycloak-login-spi .
 docker run --rm -p 8080:8080 \
   -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=change-me \
   -e KC_DIR=/opt/keycloak \
-  keycloak-remiges start-dev
+  keycloak-login-spi start-dev
 ```
 
 For production use you must also provide the database, hostname and TLS settings that `start --optimized`
