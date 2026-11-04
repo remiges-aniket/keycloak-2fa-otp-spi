@@ -123,6 +123,10 @@ No settings.
 
 ---
 
+## Login Cookie Cleanup (`login-cookie-cleanup`)
+
+An event listener with no settings. Add it under **Realm settings > Events > Event listeners**. See [Login Cookie Cleanup](login-cookie-cleanup.md).
+
 ## Requirement choices per step
 
 | Step | Offered |
@@ -144,3 +148,4 @@ No settings.
 | Code page template | Login theme | `login-sms.ftl` |
 | Session pages | Login theme | `sessionPopup.ftl`, `sessionError.ftl` |
 | Captcha form fields | Login page | `user_captcha`, `captcha_secret`, optionally `data` and `s` |
+| Cookies expired after login | Browser | `AUTH_SESSION_ID`, `KC_RESTART`, `KEYCLOAK_LOCALES` |

@@ -214,7 +214,7 @@ browser (User-Agent) and IP address, the OTP step is skipped.
 
 - The cookie is `HttpOnly` and gets the `Secure` flag only when Keycloak itself is reached over https.
 - It has no server-side expiry or revocation, so it cannot be cancelled before its age ends.
-- It uses Keycloak 22 classes. **Keep it off on Keycloak 26.**
+- It writes the cookie through the Keycloak response, so it no longer depends on Keycloak 22 classes. It has **not been tested on Keycloak 26 yet**, so test it before turning it on.
 
 ## Network, proxy and TLS
 

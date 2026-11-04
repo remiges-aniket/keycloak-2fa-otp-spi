@@ -24,6 +24,7 @@ Certain external Libraries are to be included on KEYCOAK_HOME/providers director
 
 This is a Java maven project, so just execute `mvn clean install`.
 This builds a `keycloak-remiges-spi-22.0.9.jar` in the target directory.
+It is compiled against Keycloak 26.0.2 and needs Java 17. Raise `<version>` in `pom.xml` for every new JAR.
 
 
 ## Installing the module (scriptable)
@@ -158,7 +159,7 @@ Each field has an example in its help text. Fields are grouped by label prefix.
 | OTP: Code Length / Valid For (seconds) / Max Wrong Attempts / Max Resends / Wait After Max Resends (minutes) | OTP rules | `6` / `300` / `3` / `3` / `30` |
 | Message: OTP Sent To Email / OTP Sent To Mobile / No Mobile Number / Resend Limit Reached | Lines on the OTP screen | |
 | User Attribute: Mobile Number / Email | Names of the Keycloak user attributes | `mobileNumber` or `mobile_number` |
-| Remember Device: Enable / Days | Skip the OTP on a remembered browser. Keep off on Keycloak 26 | |
+| Remember Device: Enable / Days | Skip the OTP on a remembered browser. Not yet tested on Keycloak 26, test before use | |
 | Network: Use Proxy / Proxy Host / Proxy Port / Skip TLS Verification | Network settings. Skip TLS is for testing only | `proxy.nuvama.local` / `8080` |
 | Testing: Simulation Mode | No OTP is sent by SMS or email, only the masked number and email are logged. Use with Testing: Fixed OTP | off in production |
 | Testing: Fixed OTP | Only with Simulation Mode on: every user gets this code instead of a random one, for automated tests. Digits only, at least 4. Blank = random codes | `123456`, blank in production |
@@ -170,6 +171,10 @@ The default keeps the old text and spacing, with only the brand name as a variab
 Branding: Name, Email API: URL / Key / Format, Reset Email: Sender Name / Sender Address (required) / Provider Tag / Subject / Body,
 Message: Reset Email Sent, User Attribute: Email, and the Network fields. Keep `{link}` in the body.
 The "sent" message is also shown for unknown users and users with no email, so the screen does not show which users exist.
+
+### Login Cookie Cleanup (event listener `login-cookie-cleanup`)
+No settings. Add it under **Realm settings > Events > Event listeners**. After a completed login it removes the
+`AUTH_SESSION_ID`, `KC_RESTART` and `KEYCLOAK_LOCALES` cookies. See `docs/login-cookie-cleanup.md`.
 
 ### Captcha step (`captcha-u-p-form`)
 **Captcha API: Validation URL** is the service that checks the captcha, **Message: Wrong Captcha** is the error text, and

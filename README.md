@@ -4,8 +4,8 @@
 
 **Login hardening for Keycloak: OTP by SMS and email, IP and country allow-lists, a captcha login form, single-session enforcement, and password-reset email through an HTTP email API.**
 
-[![Java](https://img.shields.io/badge/Java-11%2B-orange.svg)](https://adoptium.net/)
-[![Keycloak](https://img.shields.io/badge/Keycloak-22%20SPI%20%7C%2026%20runtime-4d4d4d.svg)](#compatibility)
+[![Java](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://adoptium.net/)
+[![Keycloak](https://img.shields.io/badge/Keycloak-26%2B-4d4d4d.svg)](#compatibility)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 </div>
@@ -15,8 +15,8 @@
 ## What is this?
 
 Keycloak's browser login is a pipeline of **authenticator steps**. This project adds five extra steps to that
-pipeline. They ship together as a single JAR, `keycloak-remiges-spi`, and appear in the admin console next to
-the built-in steps. You mix and match them in any authentication flow.
+pipeline, plus one event listener that tidies the browser cookies after login. They ship together as a single JAR,
+`keycloak-remiges-spi`, and appear in the admin console next to the built-in steps. You mix and match them in any authentication flow.
 
 Everything an operator would want to change (message wording, sender address, OTP length, limits, proxy,
 gateway credentials) is a field in the admin console. Changing it never needs a rebuild.
@@ -35,7 +35,7 @@ flowchart LR
     class C,IP,OTP,S,RE step;
 ```
 
-## The five steps
+## The five steps and one listener
 
 | Step in the admin console | Provider id | What it gives you |
 |---|---|---|
@@ -44,6 +44,7 @@ flowchart LR
 | **Captcha Username Password Form** | `captcha-u-p-form` | The standard login form plus a captcha checked against your own validation API. The username and password can arrive AES-encrypted from the login page |
 | **Send Custom Reset Email** | `reset-credential-email-custom` | The password-reset link delivered through Netcore (or compatible) email API instead of the realm SMTP settings, with a response that does not reveal whether a user exists |
 | **user-session-validator** | `user-session-validator` | One active session per user. A second login asks whether to end the older session |
+| **Login Cookie Cleanup** (event listener) | `login-cookie-cleanup` | After a completed login, removes the `AUTH_SESSION_ID`, `KC_RESTART` and `KEYCLOAK_LOCALES` cookies from the browser. Switched on under Realm settings > Events |
 
 ## Highlights
 
@@ -66,6 +67,7 @@ flowchart LR
 | [Captcha Login Form](docs/captcha-login-form.md) | Add a captcha and encrypted credentials to the login page |
 | [Custom Reset Email](docs/custom-reset-email.md) | Send password-reset mail through an HTTP email API |
 | [Session Validator](docs/session-validator.md) | Enforce one session per user |
+| [Login Cookie Cleanup](docs/login-cookie-cleanup.md) | Remove the login-attempt cookies after login |
 | [Configuration Reference](docs/configuration-reference.md) | Every field, every placeholder, every default |
 | [Security](docs/security.md) | What is protected, what is not, and what to switch off in production |
 | [Troubleshooting](docs/troubleshooting.md) | Symptom, cause and fix |
@@ -98,13 +100,14 @@ The [SMS Authentication guide](docs/sms-authentication.md#set-it-up) walks throu
 
 | | Version |
 |---|---|
-| Java | 11 or newer |
+| Java | 17 or newer |
 | Maven | 3.8 or newer |
-| Keycloak libraries compiled against | 22.0.4 |
+| Keycloak libraries compiled against | 26.0.2 (also compiles against 26.8.1) |
 | Keycloak in the supplied `Dockerfile` | 26.0.2 |
+| Tested at runtime | 26.0.2 and 26.8.1 |
 
-The JAR is compiled against Keycloak 22.0.4 and the Dockerfile deploys it on 26.0.2. Test each step on the exact
-Keycloak version you run. The remember-device option uses Keycloak 22 classes, so keep it off on Keycloak 26.
+The JAR is compiled against Keycloak 26.0.2 and uses only calls that are the same in 26.0.2 and 26.8.1. Keycloak 22 is no longer supported,
+because the cookie cleanup needs the cookie API that appeared in Keycloak 24. Test each step on the exact Keycloak version you run.
 Details are in [Installation](docs/installation.md#compatibility-notes).
 
 ## Repository layout
@@ -125,9 +128,10 @@ Details are in [Installation](docs/installation.md#compatibility-notes).
         │   ├── ipcheckservice/     IP whitelist and GeoIP validation
         │   ├── captchaservice/     captcha login form
         │   ├── usersession/        single-session validator
+        │   ├── cookieservice/      event listener that removes login-attempt cookies after login
         │   └── util/               config, template, branding and masking helpers
         └── resources/
-            ├── META-INF/services/  registers the five authenticator factories
+            ├── META-INF/services/  registers the authenticator factories and the event listener factory
             ├── theme-resources/    login.ftl, email templates, English messages
             └── theme/              email-code-theme
 ```

@@ -10,7 +10,8 @@ How the suite is put together, and the rules that apply to all five steps.
 | **AuthenticatorFactory** | Creates the step and describes it to the admin console: name, help text, settings fields |
 | **Authentication flow** | An ordered list of steps. You build yours by duplicating the built-in `browser` flow |
 | **Authentication session** | Short-lived per-login storage. Steps keep "notes" in it, such as the OTP |
-| **Service provider file** | `META-INF/services/org.keycloak.authentication.AuthenticatorFactory` lists the five factories so Keycloak finds them |
+| **Service provider file** | `META-INF/services/org.keycloak.authentication.AuthenticatorFactory` lists the five factories so Keycloak finds them. `META-INF/services/org.keycloak.events.EventListenerProviderFactory` lists the cookie cleanup listener |
+| **Event listener** | Code that Keycloak calls for events such as `LOGIN`. It is not a step in a flow and is switched on per realm under Events |
 
 ## Component map
 
@@ -24,6 +25,7 @@ flowchart TB
         IP["ipcheckservice<br/>ClientIPValidator<br/>+ util: AttributesReader,<br/>IpRangeCheckUtil, GeoIp2Util"]
         CAP["captchaservice<br/>CaptchaUsernamePasswordForm"]
         SES["usersession<br/>UserSessionAuthenticator"]
+        COK["cookieservice<br/>LoginCookieCleanupListener"]
         UT["util<br/>ConfigUtil, TemplateUtil,<br/>BrandingUtil, MaskUtil"]
         CO["Constants"]
     end
@@ -53,6 +55,7 @@ flowchart TB
 | `ipcheckservice` | The IP step, plus `util` classes that read attributes, compare IP ranges and look up countries |
 | `captchaservice` | The captcha form. Extends Keycloak's `UsernamePasswordForm` |
 | `usersession` | The single-session step |
+| `cookieservice` | Event listener that expires the login-attempt cookies after a completed login |
 | `util` | Small helpers shared by all steps |
 
 ## How a setting is resolved

@@ -105,8 +105,12 @@ Use it as a base for your own theme rather than as a drop-in file.
 ## Encrypted credentials (optional)
 
 The page may encrypt the username and password so they are not sent as plain form fields. If the form contains
-**both** `data` and `s`, the step decrypts them. If either is missing, the step logs a warning and uses the plain
+**both** `data` and `s`, the step decrypts them and checks the decrypted username and password **directly**. The plain
+`password` field is not needed and the login page does not post it. If either is missing, the step logs a warning and uses the plain
 fields. The sample `login.ftl` does not include the encryption script, so this part is for pages that add it.
+
+The step keeps the decrypted values in its own copy of the form data. It does not write them back into the request,
+because Keycloak 26 returns a fresh copy of the request form on every call and the values would be lost.
 
 | Form field | Content |
 |---|---|

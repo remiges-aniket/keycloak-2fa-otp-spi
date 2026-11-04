@@ -20,9 +20,10 @@ kc.sh start --log-level=INFO,co.remiges.tech:debug
 
 ### The step loads but crashes on Keycloak 26
 
-The code compiles against Keycloak 22.0.4. If a `NoSuchMethodError` or `ClassNotFoundException` mentions a Keycloak
-class, that class changed. Rebuild against your Keycloak version by changing `version.org.keycloak` in
-`keycloak-spis/pom.xml`, and fix the compile errors. The remember-device code is the most likely cause, so keep that option off.
+The code compiles against Keycloak 26.0.2. If a `NoSuchMethodError` or `ClassNotFoundException` mentions a Keycloak
+class, that class changed or does not exist in your Keycloak. Rebuild against your version with
+`mvn clean package -Dversion.org.keycloak=<version>`, and fix the compile errors. Keycloak 22 and 23 are not supported, because
+the cookie cleanup needs the cookie API from Keycloak 24.
 
 ## SMS Authentication
 
@@ -102,6 +103,8 @@ The user has no value in the email attribute. The step expects an email for the 
 | "Encrypted payload is too large" | `data` or `s` exceeds the limits (4096 and 128 hex characters) |
 | "AES-GCM decryption failed" | The secret differs between console and page, or the page encrypts with other parameters ([details](captcha-login-form.md#encrypted-credentials-optional)) |
 | A warning says the built-in secret is used | **Credentials Encryption Secret** is blank. Set it in both places |
+| "Invalid username or password" for a correct password, and no decrypt error in the log | The page posts both the encrypted fields and the plain password, or the JAR is older than 22.0.8 and Keycloak is newer than 26.0. Use the current JAR: it checks the decrypted values directly |
+| AUTH_SESSION_ID is still present after login | See [Login Cookie Cleanup](login-cookie-cleanup.md#troubleshooting) |
 
 ## Send Custom Reset Email
 

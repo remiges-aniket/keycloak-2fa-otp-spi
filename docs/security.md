@@ -11,6 +11,8 @@ What the suite does to protect your logins, the settings that weaken it, and wha
 - [ ] **Login Page: Credentials Encryption Secret** is a long random value, identical in the console and the login page.
 - [ ] **Remember Device: Enable** is off on Keycloak 26.
 - [ ] **user-session-validator** comes **after** the OTP step.
+- [ ] **login-cookie-cleanup** is added under Realm settings > Events > Event listeners, in every realm.
+- [ ] The login page posts only the encrypted `data` and `s` fields, not the plain password field.
 - [ ] Keycloak sees real client IPs (proxy headers configured) if you use the IP Validator.
 - [ ] The login page is served over **https**.
 - [ ] The SMS text matches the DLT registration (India).
@@ -50,10 +52,11 @@ What the suite does to protect your logins, the settings that weaken it, and wha
 | OTP stored as plain text in the authentication session | Anyone with access to Keycloak's session store could read a live code | Keep the session store private. Codes expire |
 | Captcha encryption secret is in the page script | The user can read it. It protects the network path only | Use https. Do not treat it as protection from the user |
 | Zero IV in the credential encryption | Same plaintext and salt give the same ciphertext | The salt is random per request, which limits the impact |
-| Remember-device cookie cannot be revoked | It lives until its age ends | Keep the days short, keep it off on Keycloak 26 |
+| Remember-device cookie cannot be revoked | It lives until its age ends | Keep the days short |
 | No rate limit by IP or user on the captcha service | Brute force is limited only by the captcha | Add limits at the captcha service and a Keycloak brute-force detection policy |
 | `127.0.0.1` counts as country `IN` | A proxy that hides real IPs makes every user look Indian | Configure proxy headers |
-| Code is built against Keycloak 22.0.4 | Newer Keycloak may change classes the code relies on | Test on your exact version |
+| Code is built against Keycloak 26.0.2 | Newer Keycloak may change classes the code relies on | Test on your exact version. It was also compiled and run on 26.8.1 |
+| The SSO cookie `KEYCLOAK_IDENTITY` stays in the browser after login | A scanner that expects every Keycloak cookie to disappear will still see it | It is signed, HttpOnly and new after login. The single-page app needs it to restore its session after a refresh |
 
 ## Order of steps
 

@@ -13,8 +13,8 @@ mvn javadoc:javadoc        # API docs, written to keycloak-spis/ (see pom.xml re
 | Item | Value |
 |---|---|
 | Artifact | `keycloak-remiges-spi`, version `22.0.9` |
-| Java release | 11 (`maven-compiler-plugin` `<release>11</release>`) |
-| Keycloak version | property `version.org.keycloak` = `22.0.4` |
+| Java release | 17 (property `maven.compiler.release`) |
+| Keycloak version | property `version.org.keycloak` = `26.0.2`. Check another version with `-Dversion.org.keycloak=26.8.1` |
 | Main dependencies | `keycloak-server-spi`, `keycloak-server-spi-private`, `keycloak-core`, `keycloak-services`, `ipaddress`, `geoip2`, `jakarta.ws.rs-api`, `jackson-databind` (provided), `lombok` |
 
 Source lives under `keycloak-spis/src/main/java/co/remiges/tech`. See the [architecture](architecture.md#packages) for what each package does.
@@ -39,6 +39,9 @@ Source lives under `keycloak-spis/src/main/java/co/remiges/tech`. See the [archi
 5. Build, deploy, run `kc.sh build`, and add the step to a test flow.
 6. Document it: a guide under `docs/`, an entry in the [Configuration Reference](configuration-reference.md), and a row in the README table.
 
+Adding an event listener works the same way, with `EventListenerProviderFactory` and the file
+`META-INF/services/org.keycloak.events.EventListenerProviderFactory`. It must also be switched on in the realm's Event listeners.
+
 The factories currently registered:
 
 ```
@@ -47,6 +50,12 @@ co.remiges.tech.ipcheckservice.ClientIPValidationFactory
 co.remiges.tech.captchaservice.CaptchaUsernamePasswordFormFactory
 co.remiges.tech.usersession.UserSessionAuthenticatorFactory
 co.remiges.tech.emailservice.CustomResetCredentialEmailFactory
+```
+
+And in `META-INF/services/org.keycloak.events.EventListenerProviderFactory`:
+
+```
+co.remiges.tech.cookieservice.LoginCookieCleanupListenerFactory
 ```
 
 ## Adding another SMS gateway
@@ -100,9 +109,9 @@ Add them to `.gitignore` and remove them from the index when you are ready.
 
 ## Release checklist
 
-1. Update `<version>` in `keycloak-spis/pom.xml`.
-2. Update the JAR name in `keycloak-spis/Dockerfile` and in the docs (`installation.md`, README quick start).
+1. **Raise `<version>` in `keycloak-spis/pom.xml` for every new JAR**, so the newest file is easy to recognise. The last shipped jar was 22.0.8, the current one is 22.0.9.
+2. Update the JAR name in `keycloak-spis/Dockerfile` and in the docs (`installation.md`, README quick start, `keycloak-spis/README.md`, this page).
 3. `mvn clean install`.
-4. Test each step you changed on the Keycloak version you deploy.
+4. Test each step you changed on the Keycloak version you deploy, and compile once against the newest Keycloak 26 (`-Dversion.org.keycloak=...`).
 5. Update [`docs/`](.) for any new field or behaviour.
 6. Tag the release and attach the JAR.

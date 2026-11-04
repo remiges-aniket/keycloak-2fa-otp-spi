@@ -7,8 +7,8 @@ and running it in Docker.
 
 | Item | Needed for |
 |---|---|
-| Java 11 or newer, Maven 3.8 or newer | Building |
-| A running Keycloak (Quarkus distribution) | Deploying |
+| Java 17 or newer, Maven 3.8 or newer | Building |
+| A running Keycloak 26 or newer (Quarkus distribution) | Deploying |
 | An SMS gateway that accepts an HTTP GET | SMS Authentication |
 | An HTTP email API (Netcore v5, v6 or the legacy format) | OTP email, custom reset email |
 | MaxMind `GeoLite2-Country.mmdb` | IP Validator country check only |
@@ -24,7 +24,8 @@ mvn clean install
 The result is `keycloak-spis/target/keycloak-remiges-spi-22.0.9.jar`.
 
 The version in the file name comes from `<version>` in `keycloak-spis/pom.xml`. The Keycloak version the code is
-compiled against is the property `version.org.keycloak` (22.0.4).
+compiled against is the property `version.org.keycloak` (26.0.2). To check another version, pass it on the command line,
+for example `mvn clean package -Dversion.org.keycloak=26.8.1`.
 
 ## 2. Deploy the JAR
 
@@ -77,6 +78,9 @@ In the admin console open **Authentication > Flows**, pick a flow, click **Add s
 - Send Custom Reset Email
 - user-session-validator
 
+Then switch on the cookie cleanup: **Realm settings > Events > Event listeners**, add **login-cookie-cleanup**, save.
+It is realm configuration, so repeat it in every realm and environment. See [Login Cookie Cleanup](login-cookie-cleanup.md).
+
 If one is missing, see [Troubleshooting](troubleshooting.md#a-step-is-missing-from-the-add-step-list).
 
 ## 5. Install the theme files
@@ -119,9 +123,10 @@ them if you use that step.
 
 | Fact | Consequence |
 |---|---|
-| The code compiles against Keycloak **22.0.4** | Those are the SPI classes it was written for |
-| The Dockerfile runs **Keycloak 26.0.2** | Most authenticator SPI calls are stable across the two, but test every step you use |
-| The remember-device option uses Keycloak 22 classes (`ServerCookie`, RESTEasy `HttpResponse`) | Keep **Remember Device: Enable** off on Keycloak 26 |
+| The code compiles against Keycloak **26.0.2** and was also compiled and run on **26.8.1** | Use Keycloak 26 or newer |
+| The Dockerfile runs **Keycloak 26.0.2** | Same version as the build |
+| The login cookie cleanup uses `org.keycloak.cookie.CookieProvider` | It exists from Keycloak 24, so Keycloak 22 is not supported |
+| The remember-device cookie is written through the Keycloak response (`HttpResponse.addHeader`) | It no longer uses Keycloak 22 classes, but test it on your version before turning it on |
 | `jakarta.ws.rs` is used throughout | It targets the Jakarta namespace of Keycloak 22 and later |
 
 ## Upgrading the JAR
