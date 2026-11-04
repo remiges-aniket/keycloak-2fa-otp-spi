@@ -22,7 +22,7 @@ import org.jboss.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.validator.exception.CertificateException;
+import java.security.cert.CertificateException;
 
 import co.remiges.tech.util.ConfigUtil;
 

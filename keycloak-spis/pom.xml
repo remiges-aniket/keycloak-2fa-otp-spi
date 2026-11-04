@@ -9,7 +9,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <version.org.keycloak>22.0.4</version.org.keycloak>
         <version.org.jboss.logging>3.4.1.Final</version.org.jboss.logging>
     </properties>
@@ -24,7 +24,7 @@
                  <artifactId>maven-compiler-plugin</artifactId>
                  <version>3.8.0</version>
                  <configuration>
-                     <release>11</release>
+                     <release>${maven.compiler.release}</release>
                  </configuration>
             </plugin>
             <plugin>

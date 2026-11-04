@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.spi.HttpResponse;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.keycloak.TokenCategory;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.AuthenticationFlowException;
 import org.keycloak.authentication.Authenticator;
 import org.keycloak.common.util.SecretGenerator;
-import org.keycloak.common.util.ServerCookie;
 import org.keycloak.crypto.SignatureProvider;
 import org.keycloak.crypto.SignatureSignerContext;
 import org.keycloak.email.EmailException;
@@ -587,7 +584,7 @@ public class SmsAuthenticator implements Authenticator {
 		URI uri = context.getUriInfo().getBaseUriBuilder().path("realms").path(context.getRealm().getName()).build();
 		// the cookie is only sent over https when Keycloak itself is reached over https
 		boolean secure = "https".equalsIgnoreCase(context.getUriInfo().getBaseUri().getScheme());
-		addCookie(Constants.COOKIE_2FA_ANSWERED, getEncryptedCookieString(context), uri.getRawPath(), null, null,
+		addCookie(context.getSession(), Constants.COOKIE_2FA_ANSWERED, getEncryptedCookieString(context), uri.getRawPath(),
 				maxCookieAge, secure, true);
 	}
 
@@ -631,23 +628,19 @@ public class SmsAuthenticator implements Authenticator {
 	/**
 	 * Creates and adds a cookie to HTTP headers
 	 * 
+	 * @param session  Keycloak session of the request
 	 * @param name     Name of Cookie
 	 * @param value    Value of the Cookie
 	 * @param path
-	 * @param domain
-	 * @param comment
 	 * @param maxAge   Validity of cookie
 	 * @param secure
 	 * @param httpOnly
 	 */
-	private static void addCookie(String name, String value, String path, String domain, String comment, int maxAge,
+	private static void addCookie(KeycloakSession session, String name, String value, String path, int maxAge,
 			boolean secure, boolean httpOnly) {
-		HttpResponse response = ResteasyProviderFactory.getInstance().getContextData(HttpResponse.class);
-		StringBuilder cookieBuf = new StringBuilder();
-		ServerCookie.appendCookieValue(cookieBuf, 1, name, value, path, domain, comment, maxAge, secure, httpOnly,
-				null);
-		String cookie = cookieBuf.toString();
-		response.getOutputHeaders().add(HttpHeaders.SET_COOKIE, cookie);
+		NewCookie cookie = new NewCookie.Builder(name).value(value).path(path).maxAge(maxAge).secure(secure)
+				.httpOnly(httpOnly).build();
+		session.getContext().getHttpResponse().addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 	}
 
 	/**

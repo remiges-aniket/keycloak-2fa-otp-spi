@@ -19,6 +19,7 @@ import org.keycloak.services.validation.Validation;
 import org.keycloak.util.JsonSerialization;
 import co.remiges.tech.Constants;
 import co.remiges.tech.util.ConfigUtil;
+import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 
@@ -64,8 +65,10 @@ public class CaptchaUsernamePasswordForm extends UsernamePasswordForm implements
     public void action(AuthenticationFlowContext context) {
         logger.info("action(AuthenticationFlowContext) - start");
     
-        MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-    
+        // a copy: Keycloak does not guarantee that the request returns the same map on every call, so the decrypted
+        // values are kept here and handed to the credential check directly
+        MultivaluedMap<String, String> formData = new MultivaluedHashMap<>(context.getHttpRequest().getDecodedFormParameters());
+
         // 🔐 Decryption Section
         String encryptedDataHex = formData.getFirst("data");
         String saltHex = formData.getFirst("s");
@@ -132,7 +135,15 @@ public class CaptchaUsernamePasswordForm extends UsernamePasswordForm implements
         }
         if (success) {
             logger.info("CAPTCHA validation passed. Proceeding with standard authentication.");
-            super.action(context);
+            // same steps as UsernamePasswordForm.action(), but on the map that holds the decrypted credentials
+            if (formData.containsKey("cancel")) {
+                context.cancelLogin();
+                return;
+            }
+            if (!validateForm(context, formData)) {
+                return;
+            }
+            context.success();
         } else {
             logger.warn("CAPTCHA validation failed.");
             context.form().setAttribute("captchaError", true);

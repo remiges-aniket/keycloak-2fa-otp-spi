@@ -9,7 +9,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.jboss.logging.Logger;
 
-import com.webauthn4j.validator.exception.CertificateException;
+import java.security.cert.CertificateException;
 
 import co.remiges.tech.Constants;
 import co.remiges.tech.util.ConfigUtil;
