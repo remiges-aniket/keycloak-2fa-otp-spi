@@ -1,5 +1,0 @@
-co.remiges.tech.smsservice.SmsAuthenticatorFactory
-co.remiges.tech.ipcheckservice.ClientIPValidationFactory
-co.remiges.tech.captchaservice.CaptchaUsernamePasswordFormFactory
-co.remiges.tech.usersession.UserSessionAuthenticatorFactory
-co.remiges.tech.emailservice.CustomResetCredentialEmailFactory

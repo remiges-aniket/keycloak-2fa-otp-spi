@@ -1,0 +1,12 @@
+# build output and generated docs: the jar is published as a release asset, not stored in git
+target/
+keycloak-spis/target/
+keycloak-spis/apidocs/
+
+# Eclipse
+.metadata/
+keycloak-spis/.metadata/
+.classpath
+.project
+.factorypath
+.settings/
