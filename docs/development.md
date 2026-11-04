@@ -12,7 +12,7 @@ mvn javadoc:javadoc        # API docs, written to keycloak-spis/ (see pom.xml re
 
 | Item | Value |
 |---|---|
-| Artifact | `keycloak-remiges-spi`, version `22.0.7` |
+| Artifact | `keycloak-remiges-spi`, version `22.0.9` |
 | Java release | 11 (`maven-compiler-plugin` `<release>11</release>`) |
 | Keycloak version | property `version.org.keycloak` = `22.0.4` |
 | Main dependencies | `keycloak-server-spi`, `keycloak-server-spi-private`, `keycloak-core`, `keycloak-services`, `ipaddress`, `geoip2`, `jakarta.ws.rs-api`, `jackson-databind` (provided), `lombok` |

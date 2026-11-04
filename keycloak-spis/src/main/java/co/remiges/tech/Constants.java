@@ -154,4 +154,7 @@ public class Constants {
 	public static final String PH_IP = "ip";
 	public static final String PH_COUNTRY = "country";
 	public static final String PH_ALLOWED_COUNTRY = "allowedCountry";
+
+	/** Id of the event listener that expires the login-attempt cookies; it is switched on in the realm event settings. */
+	public static final String LOGIN_COOKIE_CLEANUP_LISTENER_ID = "login-cookie-cleanup";
 }

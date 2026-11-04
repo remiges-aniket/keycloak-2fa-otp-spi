@@ -78,10 +78,10 @@ The admin-console field reference also lives next to the code in [`keycloak-spis
 ```bash
 # 1. Build
 cd keycloak-spis
-mvn clean install                      # -> target/keycloak-remiges-spi-22.0.7.jar
+mvn clean install                      # -> target/keycloak-remiges-spi-22.0.9.jar
 
 # 2. Deploy
-cp target/keycloak-remiges-spi-22.0.7.jar /opt/keycloak/providers/
+cp target/keycloak-remiges-spi-22.0.9.jar /opt/keycloak/providers/
 /opt/keycloak/bin/kc.sh build          # required, or the steps do not appear
 
 # 3. Restart Keycloak

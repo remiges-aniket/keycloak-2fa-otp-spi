@@ -21,7 +21,7 @@ cd keycloak-spis
 mvn clean install
 ```
 
-The result is `keycloak-spis/target/keycloak-remiges-spi-22.0.7.jar`.
+The result is `keycloak-spis/target/keycloak-remiges-spi-22.0.9.jar`.
 
 The version in the file name comes from `<version>` in `keycloak-spis/pom.xml`. The Keycloak version the code is
 compiled against is the property `version.org.keycloak` (22.0.4).
@@ -29,7 +29,7 @@ compiled against is the property `version.org.keycloak` (22.0.4).
 ## 2. Deploy the JAR
 
 ```bash
-cp keycloak-spis/target/keycloak-remiges-spi-22.0.7.jar /opt/keycloak/providers/
+cp keycloak-spis/target/keycloak-remiges-spi-22.0.9.jar /opt/keycloak/providers/
 ```
 
 ### Dependencies placed beside the JAR
