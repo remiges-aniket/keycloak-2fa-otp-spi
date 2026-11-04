@@ -103,7 +103,7 @@ The user has no value in the email attribute. The step expects an email for the 
 | "Encrypted payload is too large" | `data` or `s` exceeds the limits (4096 and 128 hex characters) |
 | "AES-GCM decryption failed" | The secret differs between console and page, or the page encrypts with other parameters ([details](captcha-login-form.md#encrypted-credentials-optional)) |
 | A warning says the built-in secret is used | **Credentials Encryption Secret** is blank. Set it in both places |
-| "Invalid username or password" for a correct password, and no decrypt error in the log | The page posts both the encrypted fields and the plain password, or the JAR is older than 22.0.8 and Keycloak is newer than 26.0. Use the current JAR: it checks the decrypted values directly |
+| "Invalid username or password" for a correct password, and no decrypt error in the log | The page posts both the encrypted fields and the plain password, or the JAR is one of the older 22.0.x builds and Keycloak is 26.0 or newer. Use the current JAR: it checks the decrypted values directly |
 | AUTH_SESSION_ID is still present after login | See [Login Cookie Cleanup](login-cookie-cleanup.md#troubleshooting) |
 
 ## Send Custom Reset Email

@@ -4,7 +4,7 @@ FROM quay.io/keycloak/keycloak:26.0.2 AS builder
 WORKDIR /opt/keycloak
 
 # Copy SPI JAR (contains captcha provider)
-COPY target/keycloak-remiges-spi-22.0.9.jar /opt/keycloak/providers/
+COPY target/keycloak-remiges-spi-1.0.1.jar /opt/keycloak/providers/
 
 # Build Keycloak with providers
 RUN /opt/keycloak/bin/kc.sh build

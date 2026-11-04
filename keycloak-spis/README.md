@@ -23,7 +23,7 @@ Certain external Libraries are to be included on KEYCOAK_HOME/providers director
 ## Building the Module from scratch
 
 This is a Java maven project, so just execute `mvn clean install`.
-This builds a `keycloak-remiges-spi-22.0.9.jar` in the target directory.
+This builds a `keycloak-remiges-spi-1.0.1.jar` in the target directory.
 It is compiled against Keycloak 26.0.2 and needs Java 17. Raise `<version>` in `pom.xml` for every new JAR.
 
 
@@ -31,7 +31,7 @@ It is compiled against Keycloak 26.0.2 and needs Java 17. Raise `<version>` in `
 
 It is not automatic, because you have to provide the scripts to automate the installation.
 
-You can automatically load the provider in keycloak by putting the `keycloak-remiges-spi-22.0.9.jar` to the directory `${KEYCLOAK_HOME}/providers/`
+You can automatically load the provider in keycloak by putting the `keycloak-remiges-spi-1.0.1.jar` to the directory `${KEYCLOAK_HOME}/providers/`
 Also place all the dependencies from above steps inlcuding JARs and geoip database on the same path
 
 

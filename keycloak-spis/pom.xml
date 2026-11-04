@@ -14,7 +14,7 @@
         <version.org.jboss.logging>3.4.1.Final</version.org.jboss.logging>
     </properties>
     <!-- version of this provider jar. Keycloak version it is built against is version.org.keycloak -->
-    <version>22.0.9</version>
+    <version>1.0.1</version>
 
 
     <build>

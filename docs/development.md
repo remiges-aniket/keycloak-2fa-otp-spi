@@ -12,7 +12,7 @@ mvn javadoc:javadoc        # API docs, written to keycloak-spis/ (see pom.xml re
 
 | Item | Value |
 |---|---|
-| Artifact | `keycloak-remiges-spi`, version `22.0.9` |
+| Artifact | `keycloak-remiges-spi`, version `1.0.1` |
 | Java release | 17 (property `maven.compiler.release`) |
 | Keycloak version | property `version.org.keycloak` = `26.0.2`. Check another version with `-Dversion.org.keycloak=26.8.1` |
 | Main dependencies | `keycloak-server-spi`, `keycloak-server-spi-private`, `keycloak-core`, `keycloak-services`, `ipaddress`, `geoip2`, `jakarta.ws.rs-api`, `jackson-databind` (provided), `lombok` |
@@ -109,7 +109,7 @@ Add them to `.gitignore` and remove them from the index when you are ready.
 
 ## Release checklist
 
-1. **Raise `<version>` in `keycloak-spis/pom.xml` for every new JAR**, so the newest file is easy to recognise. The last shipped jar was 22.0.8, the current one is 22.0.9.
+1. **Raise `<version>` in `keycloak-spis/pom.xml` for every new JAR**, so the newest file is easy to recognise. The jar, the pom version and the git tag carry the same number (jar `keycloak-remiges-spi-1.0.1.jar`, tag `v1.0.1`). Raise the last number each time: 1.0.2, 1.0.3 and so on. Jars named 22.0.x were built before this numbering, and 1.0.1 replaces them.
 2. Update the JAR name in `keycloak-spis/Dockerfile` and in the docs (`installation.md`, README quick start, `keycloak-spis/README.md`, this page).
 3. `mvn clean install`.
 4. Test each step you changed on the Keycloak version you deploy, and compile once against the newest Keycloak 26 (`-Dversion.org.keycloak=...`).

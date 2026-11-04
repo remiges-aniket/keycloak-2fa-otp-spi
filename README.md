@@ -80,10 +80,10 @@ The admin-console field reference also lives next to the code in [`keycloak-spis
 ```bash
 # 1. Build
 cd keycloak-spis
-mvn clean install                      # -> target/keycloak-remiges-spi-22.0.9.jar
+mvn clean install                      # -> target/keycloak-remiges-spi-1.0.1.jar
 
 # 2. Deploy
-cp target/keycloak-remiges-spi-22.0.9.jar /opt/keycloak/providers/
+cp target/keycloak-remiges-spi-1.0.1.jar /opt/keycloak/providers/
 /opt/keycloak/bin/kc.sh build          # required, or the steps do not appear
 
 # 3. Restart Keycloak
@@ -95,6 +95,11 @@ The [SMS Authentication guide](docs/sms-authentication.md#set-it-up) walks throu
 
 > **Try it safely first.** Turn on **Testing: Simulation Mode** and set **Testing: Fixed OTP** to `123456`.
 > Nothing is sent, and you can log in with that code. Turn both off before production.
+
+## Versions
+
+The jar, the pom version and the git tag use the same number: `keycloak-remiges-spi-1.0.1.jar` is built from tag `v1.0.1`, and the next one is 1.0.2.
+The jars named `22.0.x` came before this numbering. **1.0.1 replaces them**, so remove any `keycloak-remiges-spi-22.*.jar` from `providers/` before adding it. Keep only one version of the jar in that folder.
 
 ## Compatibility
 
